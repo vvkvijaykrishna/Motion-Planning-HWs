@@ -1,11 +1,12 @@
-// hw2.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+// hw2.cpp : This file contains the 'main' function. Trying to implement bug 1 algorithm here
 
 #include <iostream>
 
 int main()
 {
     std::cout << "Hello World!\n";
+    //write functionality to parse .csv input file - each obstacle should contain atleast 3 vertices
+    //stitch obstacles intersecting each other
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
