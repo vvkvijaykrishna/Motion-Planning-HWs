@@ -9,10 +9,13 @@ int main()
     std::cout << "Hello!\n";
     float step = 0.1;
     float epsilon = 0.1;
-
+    std::vector<float> point1 = { 0,0 };
+    std::vector<float> point2 = { 10,-1 };
     robot bug;
-    std::vector< std::vector<float> > path = bug.bug1(step, epsilon);
-    bug.printPath(path);
+    std::cout << "Angle is: " << bug.getAngle(point2, point1);
+    //std::vector< std::vector<float> > path = bug.bug1(step, epsilon);
+    //bug.printPath(path);
+    //bug.publishPath(path);
 
     //simulator webots;
     //webots.simulatePath(path);

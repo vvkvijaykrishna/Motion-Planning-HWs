@@ -55,6 +55,10 @@ void robot::readInputFile(const std::string& inputFile)
     }
     //std::cout << "Obstacle coordinates: " << obtacles.at(0).at(3).at(0) << obtacles.at(1).at(3).at(0) << obtacles.at(2).at(3).at(0) << obtacles.at(3).at(3).at(0) << obtacles.at(4).at(3).at(0);
     std::cout << "All input data is extracted from chosen .csv file\n";
+
+    std::vector<float> dummyPoint = { 1.5,4 };
+    std::cout << "Collision?: " << isCollosionFree(dummyPoint, obtacles) << "\n";
+
     file.close();
 }
 
@@ -105,14 +109,68 @@ std::vector< std::vector<float> > robot::bug1(const float& step, const float& ep
 
 std::vector<float> robot::getDirection(std::vector<float>& point2, std::vector<float>& point1) {
     std::vector<float> direction;
-    direction.push_back( (point2.at(0) - point1.at(0)) / getDistance(point1, point2) );
-    direction.push_back( (point2.at(1) - point1.at(1)) / getDistance(point1, point2) );
+    direction.push_back( (point2.at(0) - point1.at(0)) / getDistance(point2, point1) );
+    direction.push_back( (point2.at(1) - point1.at(1)) / getDistance(point2, point1) );
     return direction;
 
 }
 
-float robot::getDistance(std::vector<float>& point1, std::vector<float>& point2) {
+double robot::getAngle(const std::vector<float>& point2, const std::vector<float>& point1) {
+    double pi = 2 * acos(0.0);
+    double sinRatio = (point2.at(1) - point1.at(1)) / (getDistance(point2, point1));
+    double cosRatio = (point2.at(0) - point1.at(0)) / (getDistance(point2, point1));
+    double sin_angle = ( asin(sinRatio) );
+    double cos_angle = ( acos(cosRatio) );
+    double degrees;
+    if (sinRatio >= 0.0) {
+        //angle in 1st or 2nd quadrant
+        if (cosRatio >= 0.0) {
+            std::cout << "Quadrant 1: " << sin_angle << " " << cos_angle << "\n";
+            degrees = 180.0 * sin_angle / pi;
+        }
+        else {
+            std::cout << "Quadrant 2: " << sin_angle << " " << cos_angle << "\n";
+            degrees = 180.0 * cos_angle / pi;
+        }
+    }
+    else {
+        //angle in 3rd or 4th quadrant
+        if (cosRatio >= 0.0) {
+            std::cout << "Quadrant 4: " << sin_angle << " " << cos_angle << "\n";
+            degrees = 360.0 - 180.0 * cos_angle / pi;
+        }
+        else {
+            std::cout << "Quadrant 3: " << sin_angle << " " << cos_angle << "\n";
+            degrees = 180.0 - 180.0 * sin_angle / pi;
+        }
+    }
+    return degrees;
+}
+
+float robot::getDistance(const std::vector<float>& point1, const std::vector<float>& point2) {
     return (std::sqrt(std::pow((point2.at(0) - point1.at(0)), 2) + std::pow((point2.at(1) - point1.at(1)), 2)) );
+}
+
+double robot::getAngleLines(const std::vector<float>& point0, const std::vector<float>& point1, const std::vector<float>& point2) {
+    return (robot::getAngle(point2, point0) - robot::getAngle(point1, point0));
+}
+
+bool robot::isCollosionFree(const std::vector<float>& point, const std::vector< std::vector< std::vector<float> > >& obtacles) {
+    for (size_t obstacleNumber = 0; obstacleNumber < obtacles.size(); ++obstacleNumber) {
+        for (size_t vertexNumber = 0; vertexNumber < obtacles.at(obstacleNumber).size(); ++vertexNumber) {
+            if (vertexNumber == obtacles.at(obstacleNumber).size() - 1) {//last vertex
+                if (getAngleLines(point, obtacles.at(obstacleNumber).at(vertexNumber), obtacles.at(obstacleNumber).at(0)) >= 180.1)
+                    break;
+                return false;// if last vertex complete, but all below 180 (never break triggered), then point inside obstacle
+            }
+            else {//not last vertex
+                if (getAngleLines(point, obtacles.at(obstacleNumber).at(vertexNumber), obtacles.at(obstacleNumber).at(vertexNumber + 1)) >= 180.1) {
+                    break;//point outside this obstacle, no need to check for this obstacle anymore
+                }
+            }
+        }
+    }
+    return true;
 }
 
 void robot::printPath(const std::vector< std::vector<float> >& path) {
