@@ -13,6 +13,7 @@ public:
 	std::vector<float> getDirection(std::vector<float>& point1, std::vector<float>& point2);
 	float getDistance(std::vector<float>& point1, std::vector<float>& point2);
 	void printPath(const std::vector< std::vector<float> >& path);
+	int publishPath(const std::vector< std::vector<float> >& path, const std::string& csvFile = "robotPath.csv");
 
 private:
 	std::vector< std::vector<float> > workspaceLimits;

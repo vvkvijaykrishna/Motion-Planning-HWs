@@ -7,8 +7,11 @@
 #include <vector>
 #include <regex>
 #include <cmath>
-#include <chrono>   // For std::chrono::seconds, std::chrono::milliseconds, etc.
-#include <thread>   // For std::this_thread::sleep_for
+#include <chrono> // For std::chrono::seconds, std::chrono::milliseconds, etc.
+#include <thread> // For std::this_thread::sleep_for
+#include <cstdio> // Required for remove()
+#include <iomanip> // For std::quoted (C++17 and later)
+#include <system_error> // For std::error_code
 
 robot::robot(std::string inputFile) {
 	readInputFile(inputFile); //this command is used to obtain the input parameters (start, goal, obstacles)
@@ -119,4 +122,56 @@ void robot::printPath(const std::vector< std::vector<float> >& path) {
     }
 }
 
+int robot::publishPath(const std::vector< std::vector<float> >& path,const std::string& csvFile) {
+    std::ofstream outfile;
 
+    std::ifstream f(csvFile);
+    if (f.good()) { // File exists
+        f.close();
+        int result = std::remove(csvFile.c_str());
+        if (result == 0) {
+            std::cout << "Existing CSV file removed: " << csvFile << std::endl;
+        }
+        else {
+            std::error_code ec(errno, std::generic_category());
+            std::cerr << "Error removing existing CSV file: " << ec.message() << std::endl;
+            return 1; // Or handle the error as needed
+        }
+    }
+    else {
+        std::cout << "Starting a new CSV file: " << csvFile << std::endl;
+    }
+
+    // Open file for writing (append mode is not used here, since we delete it)
+    outfile.open(csvFile);
+
+    if (!outfile.is_open()) {
+        std::cerr << "Error opening CSV file for writing." << std::endl;
+        return 1;
+    }
+
+    // Open the file in write mode
+    std::ofstream file(csvFile);
+
+    if (!file.is_open()) {
+        std::cerr << "Error opening the file." << std::endl;
+        return 0;
+    }
+
+    // Iterate over each row of the 2D vector and write it to the CSV file
+    for (const auto& row : path) {
+        for (size_t i = 0; i < row.size(); ++i) {
+            file << row[i];
+            if (i != row.size() - 1) {
+                file << ",";  // Add comma between values in the same row
+            }
+        }
+        file << std::endl;  // Newline after each row
+    }
+
+    // Close the file
+    file.close();
+    std::cout << "File saved as " << csvFile << std::endl;
+
+    return 1;
+}

@@ -2,15 +2,21 @@
 
 #include <iostream>
 #include "robot.h"
+//#include "simulator.h"
 
 int main()
 {
     std::cout << "Hello!\n";
     float step = 0.1;
     float epsilon = 0.1;
+
     robot bug;
     std::vector< std::vector<float> > path = bug.bug1(step, epsilon);
     bug.printPath(path);
+
+    //simulator webots;
+    //webots.simulatePath(path);
+
     return 0;
     //write functionality to parse .csv input file - each obstacle should contain atleast 3 vertices
     //stitch obstacles intersecting each other

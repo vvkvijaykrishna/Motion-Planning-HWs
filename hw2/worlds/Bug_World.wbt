@@ -33,6 +33,7 @@ DEF PointRobot Solid {
       }
     }
   ]
+  controller "point_robot_controller"
 }
 Solid {
   translation 0 0 0
