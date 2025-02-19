@@ -1,0 +1,8 @@
+﻿  robot.cpp
+C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(59,39): warning C4305: 'initializing': truncation from 'double' to '_Ty'
+C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(59,39): warning C4305:         with
+C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(59,39): warning C4305:         [
+C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(59,39): warning C4305:             _Ty=float
+C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(59,39): warning C4305:         ]
+C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(151,12): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  hw2.vcxproj -> C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\x64\Debug\hw2.exe

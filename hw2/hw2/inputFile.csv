@@ -1,0 +1,17 @@
+This file contains assignment inputs,,,,
+,,,,
+Bug,1,,,
+,,,,
+Workspace bounds,,,,
+X-axis,"(-1,14)",,,
+Y-axis,"(-1,14)",,,
+,,,,
+Start,"(0,0)",,,
+Goal,"(10,10)",,,
+,,,,
+List of obstacle bounding boxes (each obstacle should contain atleast 2 points),,,,
+Obstacle1,"(1,1)","(2,1)","(2,5)","(1,5)"
+Obstacle2,"(3,3)","(4,3)","(4,12)","(3,12)"
+Obstacle3,"(3,12)","(12,12)","(12,13)","(3,13)"
+Obstacle4,"(12,5)","(13,5)","(13,13)","(12,13)"
+Obstacle5,"(6,5)","(12,5)","(12,6)","(6,6)"
