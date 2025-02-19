@@ -40,7 +40,7 @@
               "RelativeDocumentMoniker": "hw2\\robot.cpp",
               "ToolTip": "C:\\Vijay\\Revisiting_courses\\AMP\\motion_planning_homeworks\\hw2\\hw2\\robot.cpp",
               "RelativeToolTip": "hw2\\robot.cpp",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAADgAAAA+AAAAAAAAAA==",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAAAIoAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-02-16T22:12:33.318Z",
               "IsPinned": true,
@@ -56,8 +56,7 @@
               "RelativeToolTip": "hw2\\robot.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-02-16T22:07:36.278Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-16T22:07:36.278Z"
             },
             {
               "$type": "Document",
@@ -69,8 +68,7 @@
               "RelativeToolTip": "hw2\\simulator.cpp",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-02-17T18:30:32.138Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-17T18:30:32.138Z"
             },
             {
               "$type": "Document",
@@ -82,8 +80,7 @@
               "RelativeToolTip": "hw2\\simulator.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-02-17T18:27:37.726Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-17T18:27:37.726Z"
             }
           ]
         },
@@ -99,7 +96,7 @@
               "RelativeDocumentMoniker": "hw2\\hw2.cpp",
               "ToolTip": "C:\\Vijay\\Revisiting_courses\\AMP\\motion_planning_homeworks\\hw2\\hw2\\hw2.cpp",
               "RelativeToolTip": "hw2\\hw2.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-02-16T03:52:26.687Z",
               "EditorCaption": ""

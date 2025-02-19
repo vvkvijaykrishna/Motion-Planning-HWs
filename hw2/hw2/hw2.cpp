@@ -5,14 +5,16 @@
 //#include "simulator.h"
 
 int main()
-{
-    std::cout << "Hello!\n";
+{   
+    bool sample = false;
+    std::cout << "Hello!" << sample <<"\n";
     float step = 0.1;
     float epsilon = 0.1;
-    std::vector<float> point1 = { 0,0 };
-    std::vector<float> point2 = { 10,-1 };
+    std::vector<float> point0 = { 0,0 };
+    std::vector<float> point1 = { 1,1 };
+    std::vector<float> point2 = { 0,1 };
     robot bug;
-    std::cout << "Angle is: " << bug.getAngle(point2, point1);
+    //std::cout << "Angle is: " << bug.getAngleLines(point0, point1, point2);
     //std::vector< std::vector<float> > path = bug.bug1(step, epsilon);
     //bug.printPath(path);
     //bug.publishPath(path);

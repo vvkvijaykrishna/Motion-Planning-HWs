@@ -54,9 +54,9 @@ void robot::readInputFile(const std::string& inputFile)
         //std::cout << lineNumber << std::endl;
     }
     //std::cout << "Obstacle coordinates: " << obtacles.at(0).at(3).at(0) << obtacles.at(1).at(3).at(0) << obtacles.at(2).at(3).at(0) << obtacles.at(3).at(3).at(0) << obtacles.at(4).at(3).at(0);
-    std::cout << "All input data is extracted from chosen .csv file\n";
+    //std::cout << "All input data is extracted from chosen .csv file\n";
 
-    std::vector<float> dummyPoint = { 1.5,4 };
+    std::vector<float> dummyPoint = { 12.1,12 };
     std::cout << "Collision?: " << isCollosionFree(dummyPoint, obtacles) << "\n";
 
     file.close();
@@ -72,7 +72,7 @@ std::vector<float> robot::processCSVcell(const std::string& cell) {
         float firstNum = float(std::stoi(match[1]));  // Extract first number
         float secondNum = float(std::stoi(match[2])); // Extract second number
 
-        std::cout << "Extracted Numbers: " << firstNum << ", " << secondNum << std::endl;
+        //std::cout << "Extracted Numbers: " << firstNum << ", " << secondNum << std::endl;
         num.push_back(firstNum);
         num.push_back(secondNum);
     }
@@ -125,22 +125,22 @@ double robot::getAngle(const std::vector<float>& point2, const std::vector<float
     if (sinRatio >= 0.0) {
         //angle in 1st or 2nd quadrant
         if (cosRatio >= 0.0) {
-            std::cout << "Quadrant 1: " << sin_angle << " " << cos_angle << "\n";
+            //std::cout << "Quadrant 1: " << sin_angle << " " << cos_angle << "\n";
             degrees = 180.0 * sin_angle / pi;
         }
         else {
-            std::cout << "Quadrant 2: " << sin_angle << " " << cos_angle << "\n";
+            //std::cout << "Quadrant 2: " << sin_angle << " " << cos_angle << "\n";
             degrees = 180.0 * cos_angle / pi;
         }
     }
     else {
         //angle in 3rd or 4th quadrant
         if (cosRatio >= 0.0) {
-            std::cout << "Quadrant 4: " << sin_angle << " " << cos_angle << "\n";
+            //::cout << "Quadrant 4: " << sin_angle << " " << cos_angle << "\n";
             degrees = 360.0 - 180.0 * cos_angle / pi;
         }
         else {
-            std::cout << "Quadrant 3: " << sin_angle << " " << cos_angle << "\n";
+            //std::cout << "Quadrant 3: " << sin_angle << " " << cos_angle << "\n";
             degrees = 180.0 - 180.0 * sin_angle / pi;
         }
     }
@@ -152,19 +152,28 @@ float robot::getDistance(const std::vector<float>& point1, const std::vector<flo
 }
 
 double robot::getAngleLines(const std::vector<float>& point0, const std::vector<float>& point1, const std::vector<float>& point2) {
-    return (robot::getAngle(point2, point0) - robot::getAngle(point1, point0));
+    double angle = (robot::getAngle(point2, point0) - robot::getAngle(point1, point0));
+    if (angle < 0.0) {
+        angle += 360.0;
+    }
+    return angle;
 }
 
 bool robot::isCollosionFree(const std::vector<float>& point, const std::vector< std::vector< std::vector<float> > >& obtacles) {
     for (size_t obstacleNumber = 0; obstacleNumber < obtacles.size(); ++obstacleNumber) {
         for (size_t vertexNumber = 0; vertexNumber < obtacles.at(obstacleNumber).size(); ++vertexNumber) {
             if (vertexNumber == obtacles.at(obstacleNumber).size() - 1) {//last vertex
-                if (getAngleLines(point, obtacles.at(obstacleNumber).at(vertexNumber), obtacles.at(obstacleNumber).at(0)) >= 180.1)
+                double angle = getAngleLines(point, obtacles.at(obstacleNumber).at(vertexNumber), obtacles.at(obstacleNumber).at(0));
+                std::cout << angle << " is the angle between the given point and obstacleNumber " << obstacleNumber << " at vertex " << vertexNumber << ", 0\n";
+                if (angle >= 180.1)
                     break;
-                return false;// if last vertex complete, but all below 180 (never break triggered), then point inside obstacle
+                std::cout << "Point inside obstacle!!\n";
+                return false;// if last vertex complete, but all angles below 180 (never break triggered), then point inside obstacle
             }
             else {//not last vertex
-                if (getAngleLines(point, obtacles.at(obstacleNumber).at(vertexNumber), obtacles.at(obstacleNumber).at(vertexNumber + 1)) >= 180.1) {
+                double angle = getAngleLines(point, obtacles.at(obstacleNumber).at(vertexNumber), obtacles.at(obstacleNumber).at(vertexNumber + 1));
+                std::cout << angle << " is the angle between the given point and obstacleNumber " << obstacleNumber << " at vertex " << vertexNumber << ", " << (vertexNumber + 1)<<"\n";
+                if (angle >= 180.1) {
                     break;//point outside this obstacle, no need to check for this obstacle anymore
                 }
             }
