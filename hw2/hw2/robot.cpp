@@ -56,8 +56,8 @@ void robot::readInputFile(const std::string& inputFile)
     //std::cout << "Obstacle coordinates: " << obtacles.at(0).at(3).at(0) << obtacles.at(1).at(3).at(0) << obtacles.at(2).at(3).at(0) << obtacles.at(3).at(3).at(0) << obtacles.at(4).at(3).at(0);
     //std::cout << "All input data is extracted from chosen .csv file\n";
 
-    std::vector<float> dummyPoint = { 12.1,12 };
-    std::cout << "Collision?: " << isCollosionFree(dummyPoint, obtacles) << "\n";
+    //std::vector<float> dummyPoint = { 12.1,12 };
+    //std::cout << "Collision?: " << isCollosionFree(dummyPoint, obtacles) << "\n";
 
     file.close();
 }
@@ -71,8 +71,6 @@ std::vector<float> robot::processCSVcell(const std::string& cell) {
     if (std::regex_match(cell, match, pattern)) {
         float firstNum = float(std::stoi(match[1]));  // Extract first number
         float secondNum = float(std::stoi(match[2])); // Extract second number
-
-        //std::cout << "Extracted Numbers: " << firstNum << ", " << secondNum << std::endl;
         num.push_back(firstNum);
         num.push_back(secondNum);
     }
@@ -87,25 +85,130 @@ std::vector< std::vector<float> > robot::bug1(const float& step, const float& ep
     std::vector< std::vector<float> > path;
     std::vector<float> direction;
     std::vector<float> current;
+    std::vector<float> next;
+    std::vector<float> hitPoint; // record the thit point too!
+    bool aroundObstacle = false; // to determine whether the robot is circulating an obstacle or not
+    bool isLeft = true; //true for left, false for right
+    double pi = 2 * acos(0.0); //pi value
 
     current = start;
+    next = current;
+    
     path.push_back(current);
 
-    //std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Done tille here!\n";
+    std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Done till here!\n";
 
     while (getDistance(current, goal) > epsilon) {
-        direction = getDirection(goal, current);
-        //std::cout << "Direction: " << direction.at(0) << " " << direction.at(1) << "\n";
-        //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        current.at(0) += step * direction.at(0);
-        current.at(1) += step * direction.at(1);
-        path.push_back(current);
-        //std::cout << "Step: " << step << "Direction: " << direction.at(0) << " " << direction.at(1);
-        //std::cout << "Current: " << current.at(0) << " " << current.at(1) << "\n";
+        std::vector<float> leastDistantPoint = { 100.0,100.0 };
+        // should move towards goal, a while loop here
+        while (getDistance(current, goal) > epsilon && aroundObstacle == false) {
+            direction = getDirection(goal, current);
+            next.at(0) = current.at(0) + step * direction.at(0);
+            next.at(1) = current.at(1) + step * direction.at(1);
+            if (!isCollosionFree(next, obtacles)) {
+                hitPoint = current; // recording the hit point here
+                aroundObstacle = true;
+                std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Hit point found!\n";
+            }
+            else {
+                current.at(0) = next.at(0);
+                current.at(1) = next.at(1);
+                std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Following goal\n";
+                path.push_back(current);
+            }
+        }
 
+        //once it hits an obstacle, should record the hit point, and start going around the obstacle
+        while (aroundObstacle == true) {
+            //direction is to left of the point just interfereing with the obstacle, find the direction
+            // a while loop here to find the direction
+            bool direction_found = false;
+            std::vector<float> directionCW;
+            std::vector<float> directionCCW;
+            int directionLoopCount = 0;
+
+            while (!direction_found) {
+                // if current dir is collision free, if dirCW is collision free, then dir = dirCW, else, return dir
+                // else, dir = dirCCW
+                //std::cout << "\nIn direction_found loop\n";
+                next.at(0) = current.at(0) + step * direction.at(0);
+                next.at(1) = current.at(1) + step * direction.at(1);
+                if (isCollosionFree(next, obtacles)) {
+                    directionCW = rotateAngle(direction, -30.0);
+                    next.at(0) = current.at(0) + step * directionCW.at(0);
+                    next.at(1) = current.at(1) + step * directionCW.at(1);
+                    if (isCollosionFree(next, obtacles)) {
+                        //std::cout << direction.at(0) << " " << direction.at(1) << " " << " Before rotationCW\n";
+                        direction = directionCW;
+                        //std::cout << direction.at(0) << " " << direction.at(1) << " " << " After rotationCW\n";
+                    }
+                    else {
+                        direction_found = true;
+                        //std::cout << direction.at(0) << " " << direction.at(1) << " " << " Direction found!\n";
+                        break;
+                    }
+                }
+                else {
+                    directionCCW = rotateAngle(direction, 30.0);
+                    //std::cout << direction.at(0) << " " << direction.at(1) << " " << " Before rotationCCW\n";
+                    direction = directionCCW;
+                    //std::cout << direction.at(0) << " " << direction.at(1) << " " << " After rotationCCW\n";
+                }
+                if (directionLoopCount++ > 20) {
+                    std::cout << "Trying to find the direction since 20 attempts\nExiting the program\n";
+                    exit(0);
+                }
+
+            }
+
+            next.at(0) = current.at(0) + step * direction.at(0);
+            next.at(1) = current.at(1) + step * direction.at(1);
+            current.at(0) = next.at(0);
+            current.at(1) = next.at(1);
+            current.push_back(getDistance(current, goal));
+            std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Following obstacle!\n";
+            std::cout << "getDistance(current, goal) " << getDistance(current, goal) << " getDistance(leastDistantPoint, goal) " << getDistance(leastDistantPoint, goal) << " \n";
+            if ( getDistance(current, goal) < getDistance(leastDistantPoint, goal) ) {
+                leastDistantPoint = current;
+                std::cout << leastDistantPoint.at(0) << " " << leastDistantPoint.at(1) << " " << getDistance(leastDistantPoint, goal) << " Least Distant Point changed!\n";
+            }
+            path.push_back(current);
+
+            if (getDistance(current, hitPoint) < epsilon) {
+                // if the current point is close to the hit point, then trace back to the closest point
+                std::cout << leastDistantPoint.at(0) << " " << leastDistantPoint.at(1) << " " << getDistance(leastDistantPoint, goal) << " Least Distant Point!\n";
+                std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Reverse obstacle!\n";
+                std::vector< std::vector<float> > reversePath; // path of robot following the obstacle in CCW
+                for (int i = (path.size()-1); path.at(i) != leastDistantPoint; --i){
+                    reversePath.push_back(path.at(i));
+                }
+                for (int i = 0; i < reversePath.size(); i++) {
+                    path.push_back(reversePath.at(i));
+                    std::cout << reversePath.at(i).at(0) << " " << reversePath.at(i).at(1) << " Reverse obstacle!\n";
+                }
+                aroundObstacle = false;
+                current = leastDistantPoint;
+            }
+        }
     }
     return path;
 }
+
+std::vector<float> robot::rotateAngle(const std::vector<float>& currentDirection, const double& diffAngle) {
+    std::vector<float> zero_point = { 0.0,0.0 };
+    std::vector<float> newDirection = { 0.0,0.0 };
+    double pi = 2 * acos(0.0);
+    double current_angle = getAngle(currentDirection, zero_point);
+    double new_angle = current_angle + diffAngle;
+    //std::cout << "\nCurrent angle " << current_angle << ", New angle " << new_angle << "\n";
+    if (new_angle > 360.0) {
+        new_angle -= 360.0;
+    }
+    newDirection.at(0) = cos(new_angle * pi / 180);
+    newDirection.at(1) = sin(new_angle * pi / 180);
+    return newDirection;
+}
+
 
 std::vector<float> robot::getDirection(std::vector<float>& point2, std::vector<float>& point1) {
     std::vector<float> direction;
@@ -164,15 +267,15 @@ bool robot::isCollosionFree(const std::vector<float>& point, const std::vector< 
         for (size_t vertexNumber = 0; vertexNumber < obtacles.at(obstacleNumber).size(); ++vertexNumber) {
             if (vertexNumber == obtacles.at(obstacleNumber).size() - 1) {//last vertex
                 double angle = getAngleLines(point, obtacles.at(obstacleNumber).at(vertexNumber), obtacles.at(obstacleNumber).at(0));
-                std::cout << angle << " is the angle between the given point and obstacleNumber " << obstacleNumber << " at vertex " << vertexNumber << ", 0\n";
+                //std::cout << angle << " is the angle between the given point and obstacleNumber " << obstacleNumber << " at vertex " << vertexNumber << ", 0\n";
                 if (angle >= 180.1)
                     break;
-                std::cout << "Point inside obstacle!!\n";
+                //std::cout << "Point inside obstacle!!\n";
                 return false;// if last vertex complete, but all angles below 180 (never break triggered), then point inside obstacle
             }
             else {//not last vertex
                 double angle = getAngleLines(point, obtacles.at(obstacleNumber).at(vertexNumber), obtacles.at(obstacleNumber).at(vertexNumber + 1));
-                std::cout << angle << " is the angle between the given point and obstacleNumber " << obstacleNumber << " at vertex " << vertexNumber << ", " << (vertexNumber + 1)<<"\n";
+                //std::cout << angle << " is the angle between the given point and obstacleNumber " << obstacleNumber << " at vertex " << vertexNumber << ", " << (vertexNumber + 1)<<"\n";
                 if (angle >= 180.1) {
                     break;//point outside this obstacle, no need to check for this obstacle anymore
                 }

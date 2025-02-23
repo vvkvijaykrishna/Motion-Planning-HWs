@@ -10,6 +10,7 @@ public:
 	void readInputFile(const std::string& inputFile);
 	std::vector<float> processCSVcell(const std::string& cell);
 	std::vector< std::vector<float> > bug1(const float& step, const float& epsilon);
+	std::vector<float> rotateAngle(const std::vector<float>& currentDirection, const double& diffAngle);
 	std::vector<float> getDirection(std::vector<float>& point1, std::vector<float>& point2);
 	float getDistance(const std::vector<float>& point1, const std::vector<float>& point2);
 	double getAngleLines(const std::vector<float>& point0, const std::vector<float>& point1, const std::vector<float>& point2);
