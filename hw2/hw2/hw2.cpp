@@ -1,25 +1,32 @@
 // hw2.cpp : This file contains the 'main' function. Trying to implement bug 1 algorithm here
 
 #include <iostream>
+#include <chrono>
 #include "robot.h"
 //#include "simulator.h"
 
 int main()
 {   
+    auto start = std::chrono::high_resolution_clock::now();
     float step = 0.1;
     float epsilon = 0.1;
-    std::vector<float> point0 = { 0,0 };
-    std::vector<float> point1 = { 1,1 };
-    std::vector<float> point2 = { 0,1 };
     robot bug;
-    //std::cout << "Angle is: " << bug.getAngleLines(point0, point1, point2);
     std::vector< std::vector<float> > path = bug.bug1(step, epsilon);
-    bug.printPath(path);
+    //bug.printPath(path);
     bug.publishPath(path);
-
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Total execution time: " 
+        << std::chrono::duration<double, std::milli>(end - start).count() << " ms\n";
+  
     return 0;
+    //Proablems/ concerns
+    //1. Pubsish .csv file excluding the distance values too - done
+    //2. Bug algorithm should take the least possible path to the obstacle exit point.
+    //3. Monitor time required to run the script.
+    //4. Create a python file which simulates the .csv output file
+    //5. Write the Bug2 algorithm with the m-line (must be simple). Create a new function for this.
+
     //write functionality to parse .csv input file - each obstacle should contain atleast 3 vertices
-    //stitch obstacles intersecting each other
 
     //- class inputs
     //- class

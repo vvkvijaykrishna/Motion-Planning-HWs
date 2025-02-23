@@ -1,18 +1,4 @@
 ﻿  hw2.cpp
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\hw2.cpp(9,16): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\hw2.cpp(10,19): warning C4305: 'initializing': truncation from 'double' to 'float'
-  robot.cpp
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(182,28): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(209,29): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(209,29): warning C4244:         with
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(209,29): warning C4244:         [
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(209,29): warning C4244:             _Ty=float
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(209,29): warning C4244:         ]
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(210,29): warning C4244: '=': conversion from 'double' to '_Ty', possible loss of data
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(210,29): warning C4244:         with
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(210,29): warning C4244:         [
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(210,29): warning C4244:             _Ty=float
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(210,29): warning C4244:         ]
-C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\robot.cpp(256,12): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  Generating Code...
+C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\hw2.cpp(11,16): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\hw2\hw2.cpp(12,19): warning C4305: 'initializing': truncation from 'double' to 'float'
   hw2.vcxproj -> C:\Vijay\Revisiting_courses\AMP\motion_planning_homeworks\hw2\x64\Debug\hw2.exe

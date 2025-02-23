@@ -19,7 +19,7 @@ robot::robot(std::string inputFile) {
 
 void robot::readInputFile(const std::string& inputFile)
 {
-	std::cout << "The inputFile to be used is " << inputFile << std::endl;
+	//std::cout << "The inputFile to be used is " << inputFile << std::endl;
 
 	std::ifstream file(inputFile);
 	if (!file.is_open()) {
@@ -96,24 +96,23 @@ std::vector< std::vector<float> > robot::bug1(const float& step, const float& ep
     
     path.push_back(current);
 
-    std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Done till here!\n";
+    //std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Done till here!\n";
 
     while (getDistance(current, goal) > epsilon) {
         std::vector<float> leastDistantPoint = { 100.0,100.0 };
-        // should move towards goal, a while loop here
-        while (getDistance(current, goal) > epsilon && aroundObstacle == false) {
+        while (getDistance(current, goal) > epsilon && aroundObstacle == false) {// a while loop here to move towards goal
             direction = getDirection(goal, current);
             next.at(0) = current.at(0) + step * direction.at(0);
             next.at(1) = current.at(1) + step * direction.at(1);
             if (!isCollosionFree(next, obtacles)) {
                 hitPoint = current; // recording the hit point here
                 aroundObstacle = true;
-                std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Hit point found!\n";
+                //std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Hit point found!\n";
             }
             else {
                 current.at(0) = next.at(0);
                 current.at(1) = next.at(1);
-                std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Following goal\n";
+                //std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Following goal\n";
                 path.push_back(current);
             }
         }
@@ -121,13 +120,12 @@ std::vector< std::vector<float> > robot::bug1(const float& step, const float& ep
         //once it hits an obstacle, should record the hit point, and start going around the obstacle
         while (aroundObstacle == true) {
             //direction is to left of the point just interfereing with the obstacle, find the direction
-            // a while loop here to find the direction
             bool direction_found = false;
             std::vector<float> directionCW;
             std::vector<float> directionCCW;
             int directionLoopCount = 0;
 
-            while (!direction_found) {
+            while (!direction_found) {// while loop to find the direction
                 // if current dir is collision free, if dirCW is collision free, then dir = dirCW, else, return dir
                 // else, dir = dirCCW
                 //std::cout << "\nIn direction_found loop\n";
@@ -138,21 +136,16 @@ std::vector< std::vector<float> > robot::bug1(const float& step, const float& ep
                     next.at(0) = current.at(0) + step * directionCW.at(0);
                     next.at(1) = current.at(1) + step * directionCW.at(1);
                     if (isCollosionFree(next, obtacles)) {
-                        //std::cout << direction.at(0) << " " << direction.at(1) << " " << " Before rotationCW\n";
                         direction = directionCW;
-                        //std::cout << direction.at(0) << " " << direction.at(1) << " " << " After rotationCW\n";
                     }
                     else {
                         direction_found = true;
-                        //std::cout << direction.at(0) << " " << direction.at(1) << " " << " Direction found!\n";
                         break;
                     }
                 }
                 else {
                     directionCCW = rotateAngle(direction, 30.0);
-                    //std::cout << direction.at(0) << " " << direction.at(1) << " " << " Before rotationCCW\n";
                     direction = directionCCW;
-                    //std::cout << direction.at(0) << " " << direction.at(1) << " " << " After rotationCCW\n";
                 }
                 if (directionLoopCount++ > 20) {
                     std::cout << "Trying to find the direction since 20 attempts\nExiting the program\n";
@@ -166,25 +159,39 @@ std::vector< std::vector<float> > robot::bug1(const float& step, const float& ep
             current.at(0) = next.at(0);
             current.at(1) = next.at(1);
             current.push_back(getDistance(current, goal));
-            std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Following obstacle!\n";
-            std::cout << "getDistance(current, goal) " << getDistance(current, goal) << " getDistance(leastDistantPoint, goal) " << getDistance(leastDistantPoint, goal) << " \n";
+            //std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Following obstacle!\n";
+            //std::cout << "getDistance(current, goal) " << getDistance(current, goal) << " getDistance(leastDistantPoint, goal) " << getDistance(leastDistantPoint, goal) << " \n";
             if ( getDistance(current, goal) < getDistance(leastDistantPoint, goal) ) {
                 leastDistantPoint = current;
-                std::cout << leastDistantPoint.at(0) << " " << leastDistantPoint.at(1) << " " << getDistance(leastDistantPoint, goal) << " Least Distant Point changed!\n";
+                //std::cout << leastDistantPoint.at(0) << " " << leastDistantPoint.at(1) << " " << getDistance(leastDistantPoint, goal) << " Least Distant Point changed!\n";
             }
             path.push_back(current);
 
             if (getDistance(current, hitPoint) < epsilon) {
-                // if the current point is close to the hit point, then trace back to the closest point
-                std::cout << leastDistantPoint.at(0) << " " << leastDistantPoint.at(1) << " " << getDistance(leastDistantPoint, goal) << " Least Distant Point!\n";
-                std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Reverse obstacle!\n";
-                std::vector< std::vector<float> > reversePath; // path of robot following the obstacle in CCW
-                for (int i = (path.size()-1); path.at(i) != leastDistantPoint; --i){
-                    reversePath.push_back(path.at(i));
+                std::vector< std::vector<float> > revolveObstacle; // path of robot following the obstacle
+                //std::cout << leastDistantPoint.at(0) << " " << leastDistantPoint.at(1) << " " << getDistance(leastDistantPoint, goal) << " Least Distant Point!\n";
+                //std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Reverse obstacle!\n";
+
+                auto iterationHitPoint = std::find(path.begin(), path.end(), hitPoint);
+                auto iterationLeastDistantPoint = std::find(path.begin(), path.end(), leastDistantPoint);
+
+                int indexHitPoint = std::distance(path.begin(), iterationHitPoint);
+                int indexLeastDistantPoint = std::distance(path.begin(), iterationLeastDistantPoint);
+
+                if ( (path.size() - indexLeastDistantPoint) <= (indexLeastDistantPoint - indexHitPoint) ) {// then go CCW, else fo CW
+                    for (int i = (path.size() - 2); path.at(i) != leastDistantPoint; --i) {
+                        revolveObstacle.push_back(path.at(i));
+                    }
                 }
-                for (int i = 0; i < reversePath.size(); i++) {
-                    path.push_back(reversePath.at(i));
-                    std::cout << reversePath.at(i).at(0) << " " << reversePath.at(i).at(1) << " Reverse obstacle!\n";
+                else {
+                    for (int i = indexHitPoint; path.at(i) != leastDistantPoint; ++i) {
+                        revolveObstacle.push_back(path.at(i));
+                    }
+                }
+
+                for (int i = 0; i < revolveObstacle.size(); i++) {
+                    path.push_back(revolveObstacle.at(i));
+                    //std::cout << revolveObstacle.at(i).at(0) << " " << revolveObstacle.at(i).at(1) << " Reverse obstacle!\n";
                 }
                 aroundObstacle = false;
                 current = leastDistantPoint;
@@ -300,7 +307,7 @@ int robot::publishPath(const std::vector< std::vector<float> >& path,const std::
         f.close();
         int result = std::remove(csvFile.c_str());
         if (result == 0) {
-            std::cout << "Existing CSV file removed: " << csvFile << std::endl;
+            //std::cout << "Existing CSV file removed: " << csvFile << std::endl;
         }
         else {
             std::error_code ec(errno, std::generic_category());
@@ -312,36 +319,24 @@ int robot::publishPath(const std::vector< std::vector<float> >& path,const std::
         std::cout << "Starting a new CSV file: " << csvFile << std::endl;
     }
 
-    // Open file for writing (append mode is not used here, since we delete it)
     outfile.open(csvFile);
-
     if (!outfile.is_open()) {
         std::cerr << "Error opening CSV file for writing." << std::endl;
         return 1;
     }
 
-    // Open the file in write mode
     std::ofstream file(csvFile);
-
     if (!file.is_open()) {
         std::cerr << "Error opening the file." << std::endl;
         return 0;
     }
 
-    // Iterate over each row of the 2D vector and write it to the CSV file
     for (const auto& row : path) {
-        for (size_t i = 0; i < row.size(); ++i) {
-            file << row[i];
-            if (i != row.size() - 1) {
-                file << ",";  // Add comma between values in the same row
-            }
-        }
-        file << std::endl;  // Newline after each row
+        file << row[0] << "," << row[1] << std::endl;
     }
 
-    // Close the file
     file.close();
-    std::cout << "File saved as " << csvFile << std::endl;
+    //std::cout << "File saved as " << csvFile << std::endl;
 
     return 1;
 }
