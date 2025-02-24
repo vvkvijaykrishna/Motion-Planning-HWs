@@ -118,7 +118,7 @@ std::vector< std::vector<float> > robot::bug1(const float& step, const float& ep
         }
 
         //once it hits an obstacle, should record the hit point, and start going around the obstacle
-        while (aroundObstacle == true) {
+        while (aroundObstacle == true && getDistance(current, goal) > epsilon) {
             //direction is to left of the point just interfereing with the obstacle, find the direction
             bool direction_found = false;
             std::vector<float> directionCW;
@@ -159,13 +159,13 @@ std::vector< std::vector<float> > robot::bug1(const float& step, const float& ep
             current.at(0) = next.at(0);
             current.at(1) = next.at(1);
             current.push_back(getDistance(current, goal));
+            path.push_back(current);
             //std::cout << current.at(0) << " " << current.at(1) << " " << getDistance(current, goal) << " Following obstacle!\n";
             //std::cout << "getDistance(current, goal) " << getDistance(current, goal) << " getDistance(leastDistantPoint, goal) " << getDistance(leastDistantPoint, goal) << " \n";
             if ( getDistance(current, goal) < getDistance(leastDistantPoint, goal) ) {
                 leastDistantPoint = current;
                 //std::cout << leastDistantPoint.at(0) << " " << leastDistantPoint.at(1) << " " << getDistance(leastDistantPoint, goal) << " Least Distant Point changed!\n";
             }
-            path.push_back(current);
 
             if (getDistance(current, hitPoint) < epsilon) {
                 std::vector< std::vector<float> > revolveObstacle; // path of robot following the obstacle
@@ -201,7 +201,102 @@ std::vector< std::vector<float> > robot::bug1(const float& step, const float& ep
     return path;
 }
 
-std::vector<float> robot::rotateAngle(const std::vector<float>& currentDirection, const double& diffAngle) {
+std::vector< std::vector<float> > robot::bug2(const float& step, const float& epsilon) {
+    std::vector< std::vector<float> > path;
+    std::vector<float> direction;
+    std::vector<float> current;
+    std::vector<float> next;
+    std::vector<float> mLine = { (goal.at(1) - start.at(1)), (start.at(0) - goal.at(0)), ( start.at(0)*(start.at(1) - goal.at(1)) + start.at(1)*(goal.at(0) - start.at(0)) ) };// obtaining the m-line here
+    bool aroundObstacle = false; // to determine whether the robot is circulating an obstacle or not
+    bool isLeft = true; //true for left, false for right
+    double pi = 2 * acos(0.0); //pi value
+
+    current = start;
+    next = current;
+
+    path.push_back(current);
+
+    while (getDistance(current, goal) > epsilon) {
+        //bool obstacleFirstTime = true;
+        while (getDistance(current, goal) > epsilon && aroundObstacle == false) {// a while loop here to move towards goal
+            direction = getDirection(goal, current);
+            next.at(0) = current.at(0) + step * direction.at(0);
+            next.at(1) = current.at(1) + step * direction.at(1);
+            if (!isCollosionFree(next, obtacles)) {
+                aroundObstacle = true;
+                //std::cout << current.at(0) << " " << current.at(1) << " " << " Hit point found!\n";
+            }
+            else {
+                current.at(0) = next.at(0);
+                current.at(1) = next.at(1);
+                //std::cout << current.at(0) << " " << current.at(1) << " " << " Following goal\n";
+                path.push_back(current);
+            }
+        }
+        //once it hits an obstacle, should record the hit point, and start going around the obstacle
+        while (aroundObstacle == true && getDistance(current, goal) > epsilon) {
+            //direction is to left of the point just interfereing with the obstacle, find the direction
+            bool direction_found = false;
+            std::vector<float> directionCW;
+            std::vector<float> directionCCW;
+            int directionLoopCount = 0;
+
+            while (!direction_found) {// while loop to find the direction
+                // if current dir is collision free, if dirCW is collision free, then dir = dirCW, else, return dir
+                // else, dir = dirCCW
+                //std::cout << "\nIn direction_found loop\n";
+                next.at(0) = current.at(0) + step * direction.at(0);
+                next.at(1) = current.at(1) + step * direction.at(1);
+                if (isCollosionFree(next, obtacles)) {
+                    directionCW = rotateAngle(direction, -30.0);
+                    next.at(0) = current.at(0) + step * directionCW.at(0);
+                    next.at(1) = current.at(1) + step * directionCW.at(1);
+                    if (isCollosionFree(next, obtacles)) {
+                        direction = directionCW;
+                    }
+                    else {
+                        direction_found = true;
+                        break;
+                    }
+                }
+                else {
+                    directionCCW = rotateAngle(direction, 30.0);
+                    direction = directionCCW;
+                }
+                if (directionLoopCount++ > 20) {
+                    std::cout << "Trying to find the direction since 20 attempts\nExiting the program\n";
+                    exit(0);
+                }
+
+            }
+
+            next.at(0) = current.at(0) + step * direction.at(0);
+            next.at(1) = current.at(1) + step * direction.at(1);
+            
+            current.at(0) = next.at(0);
+            current.at(1) = next.at(1);
+            current.push_back(getDistance(current, goal));
+            path.push_back(current);
+            //std::cout << current.at(0) << " " << current.at(1) << " " << " Following obstacle!\n";
+            //std::cout << "getDistance(current, goal) " << getDistance(current, goal) << " getDistance(leastDistantPoint, goal) " << getDistance(leastDistantPoint, goal) << " \n";
+
+            //check the condition of m-line, if true, then change aroundObstacle, else let it pass
+            //std::cout << mLine.at(0) << " " << mLine.at(1) << " " << mLine.at(2) << " Mline equation!\n";
+            //std::cout << "The distance to Mline is: " << distanceToMline(mLine, current) << "\n\n";
+            if (distanceToMline(mLine, current) < epsilon) {
+                aroundObstacle = false;
+                //std::cout << current.at(0) << " " << current.at(1) << " " << " M-Line found!!!\n";
+            }
+        }
+    }
+    return path;
+}
+
+float robot::distanceToMline(const std::vector<float>& mLine, const std::vector<float>& point) {
+    return ( std::abs(mLine.at(0) * point.at(0) + mLine.at(1) * point.at(1) + mLine.at(2)) / std::sqrt(mLine.at(0) * mLine.at(0) + mLine.at(1) * mLine.at(1)) );
+}
+
+std::vector<float> robot::rotateAngle(const std::vector<float>&currentDirection, const double& diffAngle) {
     std::vector<float> zero_point = { 0.0,0.0 };
     std::vector<float> newDirection = { 0.0,0.0 };
     double pi = 2 * acos(0.0);
@@ -217,12 +312,11 @@ std::vector<float> robot::rotateAngle(const std::vector<float>& currentDirection
 }
 
 
-std::vector<float> robot::getDirection(std::vector<float>& point2, std::vector<float>& point1) {
+std::vector<float> robot::getDirection(const std::vector<float>& point2, const std::vector<float>& point1) {
     std::vector<float> direction;
     direction.push_back( (point2.at(0) - point1.at(0)) / getDistance(point2, point1) );
     direction.push_back( (point2.at(1) - point1.at(1)) / getDistance(point2, point1) );
     return direction;
-
 }
 
 double robot::getAngle(const std::vector<float>& point2, const std::vector<float>& point1) {

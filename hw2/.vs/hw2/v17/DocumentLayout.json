@@ -21,7 +21,7 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 329,
+          "DockedWidth": 266,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "hw2\\robot.cpp",
               "ToolTip": "C:\\Vijay\\Revisiting_courses\\AMP\\motion_planning_homeworks\\hw2\\hw2\\robot.cpp",
               "RelativeToolTip": "hw2\\robot.cpp",
-              "ViewState": "AgIAAF0AAAAAAAAAAAAvwG8AAAASAAAAAAAAAA==",
+              "ViewState": "AgIAAMkAAAAAAAAAAAAswN4AAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-02-19T23:39:34.742Z",
               "EditorCaption": ""
@@ -45,14 +45,15 @@
               "RelativeDocumentMoniker": "hw2\\robot.h",
               "ToolTip": "C:\\Vijay\\Revisiting_courses\\AMP\\motion_planning_homeworks\\hw2\\hw2\\robot.h",
               "RelativeToolTip": "hw2\\robot.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-02-19T23:39:29.534Z"
+              "WhenOpened": "2025-02-19T23:39:29.534Z",
+              "EditorCaption": ""
             }
           ]
         },
         {
-          "DockedWidth": 161,
+          "DockedWidth": 224,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -63,7 +64,7 @@
               "RelativeDocumentMoniker": "hw2\\hw2.cpp",
               "ToolTip": "C:\\Vijay\\Revisiting_courses\\AMP\\motion_planning_homeworks\\hw2\\hw2\\hw2.cpp",
               "RelativeToolTip": "hw2\\hw2.cpp",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABgAAAAaAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAUAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-02-19T23:39:56.162Z",
               "IsPinned": true,
