@@ -3,7 +3,6 @@
 #include <iostream>
 #include <chrono>
 #include "robot.h"
-//#include "simulator.h"
 
 int main()
 {   
@@ -18,7 +17,7 @@ int main()
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Total execution time: " 
         << std::chrono::duration<double, std::milli>(end - start).count() << " ms\n";
-  
+
     return 0;
     //Problems/ concerns
     //4. Create a python file which simulates the .csv output file

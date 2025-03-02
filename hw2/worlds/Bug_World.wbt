@@ -5,10 +5,11 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
 
 WorldInfo {
+  gravity 0
 }
 Viewpoint {
-  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position 1.8220264277753537 3.1104175219640893 25.62340196974551
+  orientation -0.38749718988474524 0.43702952506002063 0.8116964469906459 1.6590256437227247
+  position 3.4981504230185623 -6.064068825024936 16.734809254161863
 }
 TexturedBackground {
 }
@@ -19,24 +20,7 @@ RectangleArena {
   floorSize 15 15
   floorTileSize 2 2
 }
-DEF PointRobot Solid {
-  translation 0 0 0.1
-  children [
-    Shape {
-      appearance Appearance {
-        material Material {
-          diffuseColor 0 0 1
-        }
-      }
-      geometry Sphere {
-        radius 0.05
-      }
-    }
-  ]
-  controller "point_robot_controller"
-}
 Solid {
-  translation 0 0 0
   children [
     Shape {
       appearance Appearance {
@@ -66,7 +50,6 @@ Solid {
   name "Obstacle1"
 }
 Solid {
-  translation 0 0 0
   children [
     Shape {
       appearance Appearance {
@@ -96,7 +79,6 @@ Solid {
   name "Obstacle2"
 }
 Solid {
-  translation 0 0 0
   children [
     Shape {
       appearance Appearance {
@@ -126,7 +108,6 @@ Solid {
   name "Obstacle3"
 }
 Solid {
-  translation 0 0 0
   children [
     Shape {
       appearance Appearance {
@@ -156,7 +137,6 @@ Solid {
   name "Obstacle4"
 }
 Solid {
-  translation 0 0 0
   children [
     Shape {
       appearance Appearance {
@@ -185,19 +165,44 @@ Solid {
   ]
   name "Obstacle5"
 }
-
-Solid {
-  name "goal"
-  translation 10 10 0  # Position of the cylinder (centered at (10, 10))
+DEF Goal Solid {
+  translation 10 10 0
   children [
     Shape {
       appearance Appearance {
-        material Material { diffuseColor 0.1 1 0.1 }  # Blue cylinder
+        material Material {
+          diffuseColor 0 1 0.1
+        }
       }
       geometry Cylinder {
-        radius 0.1  # Radius of the cylinder
-        height 1  # Height of the cylinder
+        height 1
+        radius 0.1
       }
     }
   ]
+  name "Obstacle5(1)"
+}
+DEF POINT_ROBOT Robot {
+  translation 9.97015 9.9703 0.5
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColor 0.6 0.6 1
+      }
+      geometry Sphere {
+        radius 0.1
+      }
+    }
+  ]
+  name "PointRobot"
+  boundingObject Sphere {
+    radius 0.1
+  }
+  physics Physics {
+  }
+  controller "bug_controller_cpp"
+  controllerArgs [
+    ""
+  ]
+  supervisor TRUE
 }
