@@ -3,7 +3,6 @@
 #include <iostream>
 #include <chrono>
 #include "robot.h"
-//#include "simulator.h"
 
 int main()
 {   
@@ -11,18 +10,16 @@ int main()
     float step = 0.1;
     float epsilon = 0.1;
     robot bug;
-    std::vector< std::vector<float> > path = bug.bug1(step, epsilon);
+    //std::vector< std::vector<float> > path = bug.bug1(step, epsilon);
+    std::vector< std::vector<float> > path = bug.bug2(step, epsilon);
     //bug.printPath(path);
     bug.publishPath(path);
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Total execution time: " 
         << std::chrono::duration<double, std::milli>(end - start).count() << " ms\n";
-  
+
     return 0;
-    //Proablems/ concerns
-    //1. Pubsish .csv file excluding the distance values too - done
-    //2. Bug algorithm should take the least possible path to the obstacle exit point.
-    //3. Monitor time required to run the script.
+    //Problems/ concerns
     //4. Create a python file which simulates the .csv output file
     //5. Write the Bug2 algorithm with the m-line (must be simple). Create a new function for this.
 
